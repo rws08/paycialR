@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library('dplyr')\nlibrary('ggplot2')\nlibrary('ggmap')\nlibrary('shiny')\nlibrary('leaflet')\n\nshinyServer(\n  function(input, output, session) {\n  filteredDataPay <- reactive({\n    dataPayLoc[dataPayLoc$DATE >= input$date[1] & dataPayLoc$DATE <= input$date[2],]\n  })\n  \n  filteredDataCheck <- reactive({\n    dataCheckLoc[dataCheckLoc$DATE >= input$date[1] & dataCheckLoc$DATE <= input$date[2],]\n  })\n  \n  output$map <- renderLeaflet({\n    leaflet(dataNoZLoc) %>% \n      setView(lng = seoulLonLat[1], lat = seoulLonLat[2], zoom = 11) %>% \n      addProviderTiles(\"CartoDB.Positron\") %>%\n      addProviderTiles(\"Stamen.TonerLines\",\n                       options = providerTileOptions(opacity = 0.35)\n      ) %>%\n      addLayersControl(\n        overlayGroups = c(\"Pay\", \"CheckIn\"),\n        options = layersControlOptions(collapsed = FALSE)\n      )\n  })\n  \n  observe({\n    leafletProxy(\"map\") %>%\n      clearShapes() %>%\n      addCircles(data = filteredDataCheck(), lng = ~LONGITUDE, lat = ~LATITUDE, \n                 popup = ~paste(REG_ID, \"(\", DATE, \")\"), group = \"CheckIn\") %>%\n      addCircles(data = filteredDataPay(), lng = ~LONGITUDE, lat = ~LATITUDE, \n                 popup = ~paste(REG_ID, \"(\", DATE, \")\"), color = \"#FF0000\", group = \"Pay\")\n  })\n}\n)",
+    "created" : 1459495341618.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1540171370",
+    "id" : "DB3878",
+    "lastKnownWriteTime" : 1484716688,
+    "last_content_update" : 1484716688155,
+    "path" : "~/Documents/project/R/paycial/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "library('dplyr')\nlibrary('ggmap')\nlibrary('ggplot2')\nlibrary('shiny')\nlibrary('leaflet')\nlibrary('RMySQL')\n\n# get data from DB\n# conn <- dbConnect(\n#   drv = RMySQL::MySQL(),\n#   dbname = \"paycial\",\n#   host = \"paycial.cwirrisfr2wu.us-east-1.rds.amazonaws.com\",\n#   user = \"yws08\",\n#   password = \"PAYwon08!\"\n# )\n#location = dbGetQuery(conn, \"SELECT * FROM paycial.LOCATION_LOG WHERE LATITUDE != 0 AND LONGITUDE != 0;\")\n\n#dbDisconnect(conn)\n\nlocation <- read.csv(\"location.csv\")\n\nseoulLonLat = unlist(geocode('seoul', source = 'google'))\n#seoulmap = qmap(seoulLonLat, zoom = 11, source = 'stamen', maptype = 'toner-lite')\n#plotLocation = ggplot(data = location, aes(x = LATITUDE, y = LONGITUDE))\n\n# 전체 데이터\ndataNoZLoc = filter(location, LONGITUDE != 0, LATITUDE != 0) %>%\n  select(LONGITUDE, LATITUDE, API_TYPE, REG_ID, REG_DT) %>%\n  mutate(DATE = as.Date(REG_DT))\n\n#%>% mutate(REGION = reverseGeoCode(c(dataNoZLoc$LATITUDE, dataNoZLoc$LONGITUDE)))\n#lons = as.double(dataNoZLoc$LONGITUDE)\n#lats = as.double(dataNoZLoc$LATITUDE)\n#temp <- mapply(FUN = function(lon, lat) revgeocode(c(lon, lat)), lons, lats)\n\n# 결제 데이터\ndataPayLoc = filter(dataNoZLoc, API_TYPE == 'paygroup/payment') %>%\n  select(LONGITUDE, LATITUDE, REG_ID, REG_DT) %>%\n  mutate(DATE = as.Date(REG_DT))\n# 체크인 데이터\ndataCheckLoc = filter(dataNoZLoc, API_TYPE == 'checkIn') %>%\n  select(LONGITUDE, LATITUDE, REG_ID, REG_DT) %>%\n  mutate(DATE = as.Date(REG_DT))\n\n#seoulmap + geom_point(data = dataCheckLoc, aes(LONGITUDE, LATITUDE), size = 3, colour='#018b4d')\n",
+    "created" : 1459495339220.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1946063059",
+    "id" : "7A5679A5",
+    "lastKnownWriteTime" : 1484716713,
+    "last_content_update" : 1484716713290,
+    "path" : "~/Documents/project/R/paycial/data.R",
+    "project_path" : "data.R",
+    "properties" : {
+        "docOutlineVisible" : "0"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
