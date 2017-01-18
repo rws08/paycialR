@@ -6,13 +6,7 @@ library('leaflet')
 library('RMySQL')
 
 # get data from DB
-# conn <- dbConnect(
-#   drv = RMySQL::MySQL(),
-#   dbname = "paycial",
-#   host = "paycial.cwirrisfr2wu.us-east-1.rds.amazonaws.com",
-#   user = "yws08",
-#   password = "PAYwon08!"
-# )
+
 #location = dbGetQuery(conn, "SELECT * FROM paycial.LOCATION_LOG WHERE LATITUDE != 0 AND LONGITUDE != 0;")
 
 #dbDisconnect(conn)
